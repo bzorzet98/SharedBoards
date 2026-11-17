@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Introducción a la Programación Web Moderna</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f9f9f7;
+  --surface: #ffffff;
+  --surface2: #f3f3f0;
+  --border: #e5e5e0;
+  --text: #1a1a18;
+  --muted: #6b6b66;
+  --accent: #2563eb;
+  --accent-soft: #eff4ff;
+  --code-bg: #1e1e2e;
+  --code-text: #cdd6f4;
+  --green: #16a34a;
+  --green-soft: #f0fdf4;
+  --red: #dc2626;
+  --red-soft: #fef2f2;
+  --yellow: #d97706;
+  --yellow-soft: #fffbeb;
+  --purple: #7c3aed;
+  --purple-soft: #f5f3ff;
+  --html-c: #e44d26;
+  --css-c: #264de4;
+  --js-c: #ca8a04;
+  --jsx-c: #0891b2;
+  --py-c: #2563eb;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111110;
+    --surface: #1c1c1a;
+    --surface2: #242422;
+    --border: #2e2e2b;
+    --text: #e8e8e3;
+    --muted: #9a9a93;
+    --accent: #60a5fa;
+    --accent-soft: #1e2a3a;
+    --code-bg: #0d0d1a;
+    --green-soft: #0f2318;
+    --red-soft: #2a0f0f;
+    --yellow-soft: #2a1f0a;
+    --purple-soft: #1a1230;
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+
+/* Layout */
+.page{max-width:860px;margin:0 auto;padding:0 24px 100px}
+
+/* Nav sidebar */
+.top-bar{position:sticky;top:env(safe-area-inset-top,0);background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10;gap:12px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0);z-index:11;background:var(--bg)}
+.top-bar-title{font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;flex:1;min-width:60px}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .3s}
+
+/* Chapter nav */
+.chapter-nav{display:flex;gap:6px;flex-wrap:wrap;padding:24px 0 0}
+.chapter-btn{font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.chapter-btn:hover{color:var(--text);border-color:var(--accent)}
+.chapter-btn.active{background:var(--accent);color:white;border-color:var(--accent)}
+
+/* Typography */
+h1{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-bottom:10px}
+h2{font-size:20px;font-weight:700;letter-spacing:-.02em;margin:52px 0 16px;padding-top:8px}
+h3{font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:28px 0 10px}
+p{margin-bottom:14px;max-width:68ch}
+p:last-child{margin-bottom:0}
+strong{font-weight:600}
+em{font-style:italic}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+a:hover{border-color:var(--accent)}
+
+/* Chapter sections */
+.chapter{display:none}
+.chapter.active{display:block}
+
+/* Hero */
+.hero{padding:48px 0 32px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.eyebrow{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px}
+.subtitle{font-size:16px;color:var(--muted);max-width:56ch;margin-top:10px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+.tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+
+/* Code */
+pre{background:var(--code-bg);border-radius:8px;padding:18px 20px;overflow-x:auto;margin:14px 0;font-size:13px;line-height:1.65}
+code{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--code-text)}
+p code,li code,td code{background:var(--surface2);color:var(--accent);padding:1px 5px;border-radius:3px;font-size:12px;font-family:'JetBrains Mono',monospace}
+.kw{color:#cba6f7}.fn{color:#89b4fa}.str{color:#a6e3a1}.cm{color:#585b70;font-style:italic}.num{color:#fab387}.tp{color:#f38ba8}.ok{color:#a6e3a1}.er{color:#f38ba8}.tag-c{color:#f07178}.attr{color:#ffcb6b}
+
+/* Callouts */
+.callout{border-radius:8px;padding:14px 18px;margin:16px 0;font-size:14px}
+.callout-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.callout-info{background:var(--accent-soft);border-left:3px solid var(--accent)}
+.callout-info .callout-title{color:var(--accent)}
+.callout-green{background:var(--green-soft);border-left:3px solid var(--green)}
+.callout-green .callout-title{color:var(--green)}
+.callout-yellow{background:var(--yellow-soft);border-left:3px solid var(--yellow)}
+.callout-yellow .callout-title{color:var(--yellow)}
+.callout-purple{background:var(--purple-soft);border-left:3px solid var(--purple)}
+.callout-purple .callout-title{color:var(--purple)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:var(--surface2);border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+
+/* Comparison columns */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media(max-width:600px){.compare{grid-template-columns:1fr}}
+.compare-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.compare-box-header{padding:10px 14px;font-size:12px;font-weight:600;border-bottom:1px solid var(--border)}
+.compare-box-body{padding:14px;font-size:13px}
+.py-header{background:rgba(37,99,235,.08);color:var(--py-c)}
+.js-header{background:rgba(202,138,4,.08);color:var(--js-c)}
+.html-header{background:rgba(228,77,38,.08);color:var(--html-c)}
+.jsx-header{background:rgba(8,145,178,.08);color:var(--jsx-c)}
+
+/* Layer diagram */
+.layers{display:flex;flex-direction:column;gap:3px;margin:14px 0}
+.layer{padding:11px 16px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.layer-note{font-family:'Inter',sans-serif;font-size:11px;opacity:.7}
+
+/* Flow */
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0;font-size:13px}
+.flow-box{padding:7px 14px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap}
+.flow-arrow{color:var(--muted);font-size:18px}
+
+/* Section divider */
+.divider{border:none;border-top:1px solid var(--border);margin:36px 0}
+
+/* Number badge */
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:white;font-size:12px;font-weight:700;margin-right:8px;flex-shrink:0}
+
+/* Concept card */
+.concept-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+@media(max-width:580px){.concept-grid{grid-template-columns:1fr}}
+.concept-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.concept-card-title{font-size:13px;font-weight:600;margin-bottom:6px}
+.concept-card-body{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* Chapter navigation buttons */
+.chapter-controls{display:flex;justify-content:space-between;margin-top:52px;padding-top:24px;border-top:1px solid var(--border)}
+.nav-btn{padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+.nav-btn-primary:hover{background:#1d4ed8;color:white;border-color:#1d4ed8}
+.nav-btn:disabled{opacity:.3;cursor:default}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Introducción a la Programación Web</span>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <span style="font-size:12px;color:var(--muted)" id="chapter-counter">1 / 7</span>
+</div>
+
+<div class="page">
+
+  <!-- Chapter nav -->
+  <div class="chapter-nav">
+    <button class="chapter-btn active" onclick="goTo(0)">1. Teoría</button>
+    <button class="chapter-btn" onclick="goTo(1)">2. Python vs JS</button>
+    <button class="chapter-btn" onclick="goTo(2)">3. HTML · CSS · JS</button>
+    <button class="chapter-btn" onclick="goTo(3)">4. React y JSX</button>
+    <button class="chapter-btn" onclick="goTo(4)">5. Estado</button>
+    <button class="chapter-btn" onclick="goTo(5)">6. Context</button>
+    <button class="chapter-btn" onclick="goTo(6)">7. Efectos</button>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 1 — TEORÍA ═══════════════ -->
+  <div class="chapter active" id="ch-0">
+    <div class="hero">
+      <p class="eyebrow">Introducción a la Programación Web Moderna</p>
+      <h1>Teoría antes del código</h1>
+      <p class="subtitle">Qué es un lenguaje, qué es una librería, cómo se compila y transpila, y cómo encajan las piezas antes de escribir una sola línea.</p>
+      <div class="tags">
+        <span class="tag">Lenguajes</span>
+        <span class="tag">Compilar vs Transpilar</span>
+        <span class="tag">Descriptivo vs Imperativo</span>
+        <span class="tag">DOM</span>
+      </div>
+    </div>
+
+    <h2>¿Qué es un lenguaje de programación?</h2>
+    <p>Un lenguaje de programación es un sistema formal que permite darle instrucciones a una computadora. Para que esas instrucciones sean válidas tienen que respetar una <strong>sintaxis</strong> (reglas de escritura) y una <strong>semántica</strong> (significado de lo escrito).</p>
+    <p>Pero no todo lo que parece un lenguaje lo es. Hay una distinción importante:</p>
+
+    <table>
+      <thead><tr><th>Término</th><th>Qué es</th><th>Ejemplo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lenguaje de programación</strong></td><td>Tiene lógica, variables, control de flujo, puede computar cualquier cosa</td><td>Python, JavaScript, TypeScript</td></tr>
+        <tr><td><strong>Lenguaje de marcado</strong></td><td>Describe estructura o formato, no tiene lógica</td><td>HTML, XML, Markdown</td></tr>
+        <tr><td><strong>Lenguaje de estilos</strong></td><td>Describe presentación visual, no tiene lógica (en su forma básica)</td><td>CSS</td></tr>
+        <tr><td><strong>Librería</strong></td><td>Código reutilizable que extiende un lenguaje</td><td>React (extiende JS)</td></tr>
+        <tr><td><strong>Framework</strong></td><td>Estructura completa que dicta cómo organizar tu app</td><td>Next.js, Angular</td></tr>
+        <tr><td><strong>Extensión de sintaxis</strong></td><td>Agrega nueva sintaxis a un lenguaje existente, se transpila al original</td><td>JSX, TypeScript</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info">
+      <div class="callout-title">La pregunta clave</div>
+      ¿Puede este lenguaje tomar una decisión (if/else), repetir algo (loop) y guardar datos (variable)? Si sí, es un lenguaje de programación. HTML y CSS no pueden — solo describen.
+    </div>
+
+    <h2>Compilar vs Transpilar vs Interpretar</h2>
+    <p>Tres formas distintas de convertir código que escribís en algo que la máquina puede ejecutar:</p>
+
+    <table>
+      <thead><tr><th>Proceso</th><th>Qué hace</th><th>Resultado</th><th>Ejemplo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Compilar</strong></td><td>Convierte código a lenguaje de máquina (binario)</td><td>Archivo ejecutable (.exe, binario)</td><td>C, C++, Rust</td></tr>
+        <tr><td><strong>Transpilar</strong></td><td>Convierte código a otro lenguaje de <em>similar nivel</em></td><td>Código fuente legible en otro lenguaje</td><td>TypeScript → JS, JSX → JS</td></tr>
+        <tr><td><strong>Interpretar</strong></td><td>Ejecuta el código línea por línea en tiempo real</td><td>Ninguno — corre directo</td><td>Python, JS en el browser</td></tr>
+      </tbody>
+    </table>
+
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Python — interpretado</div>
+        <div class="compare-box-body">
+          <p>El intérprete lee y ejecuta cada línea en el momento. No hay paso previo. Los errores aparecen cuando esa línea se ejecuta.</p>
+          <pre><code>python app.py
+<span class="cm"># corre directo, sin paso previo</span></code></pre>
+        </div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">TypeScript — transpilado</div>
+        <div class="compare-box-body">
+          <p>Primero se transpila a JavaScript. Los errores de tipos aparecen en el editor, antes de correr.</p>
+          <pre><code>tsc app.tsx <span class="cm">→</span> app.js
+node app.js <span class="cm"># o el browser</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h2>Lenguajes imperativos vs declarativos</h2>
+    <p>Esta es una de las diferencias más importantes para entender React:</p>
+
+    <table>
+      <thead><tr><th></th><th>Imperativo</th><th>Declarativo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Pregunta</strong></td><td>"¿Cómo lo hago?"</td><td>"¿Qué quiero que sea?"</td></tr>
+        <tr><td><strong>Foco</strong></td><td>Los pasos para llegar al resultado</td><td>El resultado final</td></tr>
+        <tr><td><strong>Ejemplo</strong></td><td>Python, JS vanilla</td><td>React, SQL, HTML</td></tr>
+      </tbody>
+    </table>
+
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Imperativo — "hacé esto, luego esto"</div>
+        <div class="compare-box-body"><pre><code><span class="cm"># Python — describís pasos</span>
+items = []
+items.append(<span class="str">"Manzana"</span>)
+<span class="fn">print</span>(items[<span class="num">0</span>])
+<span class="cm"># vos controlás cada paso</span></code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header jsx-header">Declarativo — "así debería verse"</div>
+        <div class="compare-box-body"><pre><code><span class="cm">// React — describís el resultado</span>
+<span class="kw">return</span> (
+  &lt;p&gt;{items[<span class="num">0</span>]}&lt;/p&gt;
+)
+<span class="cm">// React decide cuándo actualizar</span></code></pre></div>
+      </div>
+    </div>
+
+    <h2>El DOM — qué es y por qué importa</h2>
+    <p>Cuando el browser carga una página HTML, no lo lee como texto plano. Lo convierte en un <strong>árbol de objetos en memoria</strong> llamado DOM (Document Object Model). Cada etiqueta HTML se convierte en un nodo del árbol que podés leer y modificar con JavaScript.</p>
+
+    <pre><code><span class="cm">// El HTML que escribís</span>
+&lt;body&gt;
+  &lt;p id=<span class="str">"contador"</span>&gt;0&lt;/p&gt;
+  &lt;button&gt;Agregar&lt;/button&gt;
+&lt;/body&gt;
+
+<span class="cm">// El árbol que el browser construye en memoria</span>
+document
+└── body
+    ├── p#contador  → texto: "0"
+    └── button      → texto: "Agregar"
+
+<span class="cm">// Cómo lo modificás con JS</span>
+document.<span class="fn">getElementById</span>(<span class="str">'contador'</span>).innerText = <span class="str">'1'</span>
+<span class="cm">// modificás el nodo en memoria → el browser re-dibuja esa parte</span></code></pre>
+
+    <div class="callout callout-yellow">
+      <div class="callout-title">El problema del DOM manual</div>
+      En una app grande con muchos componentes compartiendo datos, vos eras responsable de actualizar cada nodo del DOM manualmente. Si te olvidabas uno, la pantalla mostraba datos desactualizados. React resuelve esto automatizando ese proceso.
+    </div>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" disabled>← Anterior</button>
+      <button class="nav-btn nav-btn-primary" onclick="goTo(1)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 2 — PYTHON VS JS ═══════════════ -->
+  <div class="chapter" id="ch-1">
+    <div class="hero">
+      <h1>Python vs JavaScript</h1>
+      <p class="subtitle">Dos lenguajes de propósito general con orígenes, entornos y filosofías distintas. Comparación directa para alguien que viene de Python.</p>
+    </div>
+
+    <h2>Origen y propósito</h2>
+    <table>
+      <thead><tr><th></th><th>Python</th><th>JavaScript</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Creado</strong></td><td>1991, Guido van Rossum</td><td>1995, Brendan Eich (Netscape)</td></tr>
+        <tr><td><strong>Para qué</strong></td><td>Scripts, ciencia de datos, backend, automatización</td><td>Interactividad en el browser — nació ahí</td></tr>
+        <tr><td><strong>Dónde corre</strong></td><td>Servidor, scripts, machine learning</td><td>Browser (nativo) + servidor con Node.js</td></tr>
+        <tr><td><strong>Tipado</strong></td><td>Dinámico, con type hints opcionales</td><td>Dinámico; TypeScript agrega tipos estáticos</td></tr>
+        <tr><td><strong>Paradigma</strong></td><td>Imperativo, OOP, funcional</td><td>Imperativo, OOP, funcional, reactivo</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Diferencias de sintaxis directas</h2>
+
+    <h3>Variables</h3>
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Python</div>
+        <div class="compare-box-body"><pre><code>nombre = <span class="str">"Juan"</span>
+edad = <span class="num">25</span>
+activo = <span class="kw">True</span>
+items = [<span class="str">"Pan"</span>, <span class="str">"Leche"</span>]</code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">JavaScript / TypeScript</div>
+        <div class="compare-box-body"><pre><code><span class="kw">const</span> nombre = <span class="str">"Juan"</span>
+<span class="kw">const</span> edad = <span class="num">25</span>
+<span class="kw">const</span> activo = <span class="kw">true</span>
+<span class="kw">const</span> items = [<span class="str">"Pan"</span>, <span class="str">"Leche"</span>]</code></pre></div>
+      </div>
+    </div>
+
+    <h3>Funciones</h3>
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Python</div>
+        <div class="compare-box-body"><pre><code><span class="kw">def</span> <span class="fn">saludar</span>(nombre):
+    <span class="kw">return</span> <span class="str">f"Hola {nombre}"</span>
+
+<span class="cm"># Lambda</span>
+doble = <span class="kw">lambda</span> x: x * <span class="num">2</span></code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">JavaScript</div>
+        <div class="compare-box-body"><pre><code><span class="kw">function</span> <span class="fn">saludar</span>(nombre) {
+  <span class="kw">return</span> <span class="str">`Hola ${nombre}`</span>
+}
+
+<span class="cm">// Arrow function</span>
+<span class="kw">const</span> doble = x =&gt; x * <span class="num">2</span></code></pre></div>
+      </div>
+    </div>
+
+    <h3>Condicional inline</h3>
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Python — ternario</div>
+        <div class="compare-box-body"><pre><code>texto = <span class="str">'mayor'</span> <span class="kw">if</span> edad &gt; <span class="num">18</span> <span class="kw">else</span> <span class="str">'menor'</span></code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">JavaScript — ternario</div>
+        <div class="compare-box-body"><pre><code><span class="kw">const</span> texto = edad &gt; <span class="num">18</span> ? <span class="str">'mayor'</span> : <span class="str">'menor'</span></code></pre></div>
+      </div>
+    </div>
+
+    <h3>Spread operator</h3>
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Python</div>
+        <div class="compare-box-body"><pre><code>items = [<span class="str">"Pan"</span>, <span class="str">"Leche"</span>]
+nuevo = [*items, <span class="str">"Manzana"</span>]
+<span class="cm"># → ["Pan", "Leche", "Manzana"]</span>
+
+user = {<span class="str">'nombre'</span>: <span class="str">'Juan'</span>, <span class="str">'edad'</span>: <span class="num">25</span>}
+nuevo = {**user, <span class="str">'edad'</span>: <span class="num">30</span>}
+<span class="cm"># → {'nombre': 'Juan', 'edad': 30}</span></code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">JavaScript</div>
+        <div class="compare-box-body"><pre><code><span class="kw">const</span> items = [<span class="str">"Pan"</span>, <span class="str">"Leche"</span>]
+<span class="kw">const</span> nuevo = [...items, <span class="str">"Manzana"</span>]
+<span class="cm">// → ["Pan", "Leche", "Manzana"]</span>
+
+<span class="kw">const</span> user = { nombre: <span class="str">'Juan'</span>, edad: <span class="num">25</span> }
+<span class="kw">const</span> nuevo = { ...user, edad: <span class="num">30</span> }
+<span class="cm">// → { nombre: 'Juan', edad: 30 }</span></code></pre></div>
+      </div>
+    </div>
+
+    <h2>Diferencia clave — orden de ejecución</h2>
+    <p>Esta fue una de las dudas más importantes de la sesión. Python es estrictamente secuencial. JavaScript tiene <strong>hoisting</strong>:</p>
+
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header py-header">Python — orden estricto</div>
+        <div class="compare-box-body"><pre><code><span class="fn">print</span>(<span class="fn">saludar</span>())  <span class="er"># ❌ NameError</span>
+<span class="cm"># saludar no existe todavía</span>
+
+<span class="kw">def</span> <span class="fn">saludar</span>():
+    <span class="kw">return</span> <span class="str">"hola"</span></code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">JavaScript — hoisting</div>
+        <div class="compare-box-body"><pre><code><span class="fn">saludar</span>()  <span class="ok">// ✅ funciona</span>
+<span class="cm">// JS pre-escanea las funciones declaradas</span>
+
+<span class="kw">function</span> <span class="fn">saludar</span>() {
+  <span class="kw">return</span> <span class="str">"hola"</span>
+}
+
+<span class="cm">// Arrow functions NO tienen hoisting</span>
+<span class="kw">const</span> saludar2 = () =&gt; <span class="str">"hola"</span>  <span class="cm">// no se iza</span></code></pre></div>
+      </div>
+    </div>
+
+    <h2>Operadores especiales de JavaScript</h2>
+    <table>
+      <thead><tr><th>Operador</th><th>Nombre</th><th>Qué hace</th><th>Python equiv.</th></tr></thead>
+      <tbody>
+        <tr><td><code>cond ? a : b</code></td><td>Ternario</td><td>if/else en una línea</td><td><code>a if cond else b</code></td></tr>
+        <tr><td><code>obj?.prop</code></td><td>Optional chaining</td><td>Accede sin explotar si es null</td><td><code>getattr(obj,'prop',None)</code></td></tr>
+        <tr><td><code>val ?? default</code></td><td>Nullish coalescing</td><td>Reemplaza solo null/undefined</td><td><code>val if val is not None else default</code></td></tr>
+        <tr><td><code>val || default</code></td><td>OR lógico</td><td>Reemplaza null, undefined, 0, '', false</td><td><code>val or default</code></td></tr>
+        <tr><td><code>[...arr]</code></td><td>Spread array</td><td>Copia el array</td><td><code>[*arr]</code></td></tr>
+        <tr><td><code>{...obj}</code></td><td>Spread objeto</td><td>Copia el objeto</td><td><code>{**obj}</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-yellow">
+      <div class="callout-title">?? vs || — la diferencia importante</div>
+      <code>??</code> solo reemplaza <code>null</code> y <code>undefined</code> — deja pasar <code>0</code>, <code>''</code> y <code>false</code>.<br>
+      <code>||</code> reemplaza todo lo que JS considera "falso" — incluye <code>0</code>, <code>''</code> y <code>false</code>.<br>
+      En React usás <code>??</code> cuando <code>0</code> o <code>false</code> son valores válidos que no querés perder.
+    </div>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" onclick="goTo(0)">← Anterior</button>
+      <button class="nav-btn nav-btn-primary" onclick="goTo(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 3 — HTML CSS JS ═══════════════ -->
+  <div class="chapter" id="ch-2">
+    <div class="hero">
+      <h1>HTML, CSS y JavaScript</h1>
+      <p class="subtitle">Las tres tecnologías base de la web. Qué hace cada una, dónde corre, y cómo se relacionan en una página real.</p>
+    </div>
+
+    <h2>Los tres roles</h2>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title" style="color:var(--html-c)">HTML — Estructura</div>
+        <div class="concept-card-body">Define qué elementos existen y en qué orden. No tiene lógica. Es un lenguaje de marcado, no de programación.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title" style="color:var(--css-c)">CSS — Presentación</div>
+        <div class="concept-card-body">Define cómo se ve cada elemento. Colores, tamaños, posición, animaciones. Tampoco es un lenguaje de programación en su forma básica.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title" style="color:var(--js-c)">JavaScript — Comportamiento</div>
+        <div class="concept-card-body">El único lenguaje de programación que corre nativo en el browser. Agrega lógica, eventos y manipulación del DOM.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title" style="color:var(--jsx-c)">JSX / TSX — Componentes</div>
+        <div class="concept-card-body">Extensión de sintaxis de JS. Mezcla estructura y lógica en un solo lugar. Se transpila a JS antes de llegar al browser.</div>
+      </div>
+    </div>
+
+    <h2>El problema de Vanilla JS — el ejemplo del carrito</h2>
+    <p>Antes de React, si querías un carrito de compras tenías que actualizar el DOM manualmente en cada cambio:</p>
+
+    <pre><code><span class="cm">// EL ESTADO — datos en crudo</span>
+<span class="kw">let</span> items = [<span class="str">'Pan'</span>, <span class="str">'Leche'</span>]
+
+<span class="cm">// LA VISTA — función que dibuja según los datos</span>
+<span class="kw">function</span> <span class="fn">render</span>() {
+  document.<span class="fn">getElementById</span>(<span class="str">'contador'</span>).innerText = items.length
+
+  <span class="kw">const</span> lista = document.<span class="fn">getElementById</span>(<span class="str">'lista'</span>)
+  lista.innerHTML = <span class="str">''</span>  <span class="cm">// borramos todo y redibujamos</span>
+
+  items.<span class="fn">forEach</span>(item =&gt; {
+    <span class="kw">const</span> li = document.<span class="fn">createElement</span>(<span class="str">'li'</span>)
+    li.innerText = item
+    lista.<span class="fn">appendChild</span>(li)
+  })
+}
+
+<span class="cm">// EL EVENTO</span>
+document.<span class="fn">getElementById</span>(<span class="str">'btn'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () =&gt; {
+  items.<span class="fn">push</span>(<span class="str">'Manzana'</span>)
+  <span class="fn">render</span>()  <span class="cm">// ← tenés que acordarte siempre</span>
+})
+
+<span class="fn">render</span>()  <span class="cm">// primer render: muestra el estado inicial antes de cualquier click</span></code></pre>
+
+    <div class="callout callout-info">
+      <div class="callout-title">Por qué el primer render</div>
+      Sin él, el usuario ve una página en blanco hasta que clickea algo. El primer render muestra el estado inicial — aunque sea vacío, es el punto de partida correcto.
+    </div>
+
+    <p>Esto funciona, pero vos sos responsable de llamar <code>render()</code> cada vez. En una app con 50 eventos distintos, es fácil olvidarse de uno y que la pantalla quede desactualizada.</p>
+
+    <h2>La solución de React</h2>
+    <p>React dice: <em>la pantalla ES una función de los datos</em>. Si los datos cambian, React recalcula la pantalla. Vos no tocás el DOM nunca.</p>
+
+    <div class="flow">
+      <div class="flow-box" style="background:var(--surface2)">datos cambian</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:var(--accent-soft);color:var(--accent)">React detecta</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:var(--surface2)">re-renderiza</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:var(--surface2)">pantalla actualizada</div>
+    </div>
+
+    <h2>Dónde corre cada tecnología</h2>
+    <div class="layers">
+      <div class="layer" style="background:rgba(97,218,251,.12);color:var(--jsx-c)">
+        <span>.tsx (TypeScript + JSX)</span>
+        <span class="layer-note">tu máquina · nunca llega al browser</span>
+      </div>
+      <div class="layer" style="background:rgba(202,138,4,.1);color:var(--js-c)">
+        <span>.js (JavaScript transpilado)</span>
+        <span class="layer-note">browser + Node.js</span>
+      </div>
+      <div class="layer" style="background:rgba(228,77,38,.1);color:var(--html-c)">
+        <span>.html (HTML)</span>
+        <span class="layer-note">browser · lo primero que descarga</span>
+      </div>
+      <div class="layer" style="background:rgba(38,77,228,.1);color:var(--css-c)">
+        <span>.css (CSS)</span>
+        <span class="layer-note">browser · junto con el HTML</span>
+      </div>
+    </div>
+
+    <h2>Node.js vs Browser</h2>
+    <table>
+      <thead><tr><th></th><th>Browser</th><th>Node.js</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qué es</strong></td><td>Chrome, Firefox, Safari</td><td>Motor JS fuera del browser (2009)</td></tr>
+        <tr><td><strong>Para qué</strong></td><td>UI, interacción del usuario</td><td>Servidor, scripts, herramientas de build</td></tr>
+        <tr><td><strong>Tiene DOM</strong></td><td>Sí</td><td>No — no hay pantalla</td></tr>
+        <tr><td><strong>Puede leer archivos</strong></td><td>No (seguridad)</td><td>Sí</td></tr>
+        <tr><td><strong>React lo usa para</strong></td><td>Renderizar la UI</td><td>Compilar y transpilar tu código (Vite)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>El flujo completo — de tu código a la pantalla</h2>
+    <div class="flow" style="flex-direction:column;align-items:flex-start;gap:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="flow-box" style="background:rgba(97,218,251,.12);color:var(--jsx-c)">componente.tsx</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box" style="background:rgba(202,138,4,.1);color:var(--js-c)">Vite / Node.js transpila</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box" style="background:rgba(202,138,4,.1);color:var(--js-c)">componente.js</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="flow-box" style="background:rgba(202,138,4,.1);color:var(--js-c)">.js</div>
+        <span class="flow-arrow">+</span>
+        <div class="flow-box" style="background:rgba(228,77,38,.1);color:var(--html-c)">.html</div>
+        <span class="flow-arrow">+</span>
+        <div class="flow-box" style="background:rgba(38,77,228,.1);color:var(--css-c)">.css</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box" style="background:var(--surface2)">Browser del usuario</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px">Tu código TypeScript nunca llega al usuario. Solo el JavaScript ya transpilado.</p>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" onclick="goTo(1)">← Anterior</button>
+      <button class="nav-btn nav-btn-primary" onclick="goTo(3)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 4 — REACT Y JSX ═══════════════ -->
+  <div class="chapter" id="ch-3">
+    <div class="hero">
+      <h1>React y JSX</h1>
+      <p class="subtitle">Qué es React, por qué se inventó, qué es JSX, y las reglas de sintaxis que necesitás para leer código.</p>
+    </div>
+
+    <h2>Qué es React — y qué no es</h2>
+    <p>React es una <strong>librería de JavaScript</strong> creada por Facebook en 2011 y publicada en 2013. No es un lenguaje ni un framework completo. Se encarga de una sola cosa: <em>mantener la interfaz sincronizada con los datos</em>.</p>
+
+    <div class="callout callout-purple">
+      <div class="callout-title">El problema original — Facebook 2011</div>
+      El contador de notificaciones aparecía en la barra superior, en el chat y en el ícono de la pestaña. Todos mostraban números distintos porque cada parte del código actualizaba su propio DOM de forma independiente. Los datos y la pantalla se desincronizaban constantemente.
+    </div>
+
+    <h2>JSX — JavaScript XML</h2>
+    <p><strong>JSX</strong> son las siglas de <em>JavaScript XML</em>. Se llama XML porque la sintaxis de etiquetas <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code> viene del mundo XML/HTML. No es un lenguaje nuevo — es una extensión de sintaxis que se transpila a llamadas de función:</p>
+
+    <div class="compare">
+      <div class="compare-box">
+        <div class="compare-box-header jsx-header">JSX — lo que escribís</div>
+        <div class="compare-box-body"><pre><code><span class="kw">const</span> elemento = &lt;p&gt;Hola mundo&lt;/p&gt;</code></pre></div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-box-header js-header">JS — lo que el browser ejecuta</div>
+        <div class="compare-box-body"><pre><code><span class="kw">const</span> elemento = <span class="fn">React.createElement</span>(
+  <span class="str">'p'</span>, <span class="kw">null</span>, <span class="str">'Hola mundo'</span>
+)</code></pre></div>
+      </div>
+    </div>
+
+    <h2>Los dos modos dentro de un archivo .tsx</h2>
+    <pre><code><span class="cm">// MODO JAVASCRIPT — definís variables, lógica, funciones</span>
+<span class="kw">const</span> <span class="fn">App</span> = () =&gt; {
+  <span class="kw">const</span> nombre = <span class="str">"Juan"</span>
+  <span class="kw">const</span> items = [<span class="str">"Pan"</span>, <span class="str">"Leche"</span>]
+
+  <span class="cm">// MODO JSX — describís la estructura visual</span>
+  <span class="kw">return</span> (
+    &lt;div&gt;
+      &lt;p&gt;{nombre}&lt;/p&gt;   <span class="cm">// {} abre ventana de vuelta a JS</span>
+    &lt;/div&gt;
+  )
+}
+
+<span class="cm">// Regla: fuera del return → JS  |  dentro del return → JSX  |  dentro de {} → JS</span></code></pre>
+
+    <h2>Extensiones de archivo</h2>
+    <table>
+      <thead><tr><th>Extensión</th><th>Contenido</th><th>Cuándo se usa</th></tr></thead>
+      <tbody>
+        <tr><td><code>.js</code></td><td>JavaScript puro</td><td>Sin tipos, sin JSX</td></tr>
+        <tr><td><code>.jsx</code></td><td>JavaScript + JSX</td><td>React sin TypeScript</td></tr>
+        <tr><td><code>.ts</code></td><td>TypeScript puro</td><td>Con tipos, sin JSX</td></tr>
+        <tr><td><code>.tsx</code></td><td>TypeScript + JSX</td><td>React con TypeScript — lo más común</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Reglas de JSX</h2>
+
+    <h3>1 — Todo debe cerrarse</h3>
+    <pre><code>&lt;input /&gt;        <span class="ok">// ✅ self-closing</span>
+&lt;input&gt;          <span class="er">// ❌ en JSX es error</span>
+&lt;div&gt;&lt;/div&gt;      <span class="ok">// ✅ apertura y cierre</span></code></pre>
+
+    <h3>2 — Solo una raíz por return</h3>
+    <pre><code><span class="cm">// ❌ dos raíces</span>
+<span class="kw">return</span> (
+  &lt;h1&gt;Título&lt;/h1&gt;
+  &lt;p&gt;Texto&lt;/p&gt;
+)
+
+<span class="cm">// ✅ Fragment — no agrega nada al DOM</span>
+<span class="kw">return</span> (
+  &lt;&gt;
+    &lt;h1&gt;Título&lt;/h1&gt;
+    &lt;p&gt;Texto&lt;/p&gt;
+  &lt;/&gt;
+)</code></pre>
+
+    <h3>3 — className, no class</h3>
+    <pre><code>&lt;div <span class="attr">className</span>=<span class="str">"caja"</span>&gt;    <span class="ok">// ✅ JSX</span>
+&lt;div <span class="attr">class</span>=<span class="str">"caja"</span>&gt;         <span class="er">// ❌ class es reservado en JS</span></code></pre>
+
+    <h3>4 — style recibe objeto, no string</h3>
+    <pre><code><span class="cm">// ❌ HTML</span>
+&lt;p <span class="attr">style</span>=<span class="str">"color:red; font-size:20px"</span>&gt;
+
+<span class="cm">// ✅ JSX — objeto JS, camelCase</span>
+&lt;p <span class="attr">style</span>={{ color: <span class="str">'red'</span>, fontSize: <span class="str">'20px'</span> }}&gt;
+<span class="cm">//        ↑↑ doble llave: la exterior abre JS, la interior es el objeto</span></code></pre>
+
+    <h3>5 — Listas con map y key</h3>
+    <pre><code><span class="kw">const</span> items = [<span class="str">"Pan"</span>, <span class="str">"Leche"</span>, <span class="str">"Manzana"</span>]
+
+<span class="kw">return</span> (
+  &lt;ul&gt;
+    {items.<span class="fn">map</span>(item =&gt; (
+      &lt;li <span class="attr">key</span>={item}&gt;{item}&lt;/li&gt;
+      <span class="cm">//  ↑ key es obligatorio — le dice a React qué elemento es cuál</span>
+    ))}
+  &lt;/ul&gt;
+)</code></pre>
+
+    <h3>6 — Condicionales</h3>
+    <pre><code><span class="cm">// Ternario — mostrar uno u otro</span>
+{logueado ? &lt;p&gt;Bienvenido&lt;/p&gt; : &lt;p&gt;Iniciá sesión&lt;/p&gt;}
+
+<span class="cm">// && — mostrar solo si es true</span>
+{tieneError &amp;&amp; &lt;p style={{ color: <span class="str">'red'</span> }}&gt;Error&lt;/p&gt;}</code></pre>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" onclick="goTo(2)">← Anterior</button>
+      <button class="nav-btn nav-btn-primary" onclick="goTo(4)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 5 — ESTADO ═══════════════ -->
+  <div class="chapter" id="ch-4">
+    <div class="hero">
+      <h1>Estado — useState</h1>
+      <p class="subtitle">Cómo React detecta cambios y actualiza la pantalla automáticamente. El concepto más central de React.</p>
+    </div>
+
+    <h2>El problema — React no ve tus variables</h2>
+    <pre><code><span class="cm">// ❌ React no sabe que esto cambió</span>
+<span class="kw">let</span> items = []
+items.<span class="fn">push</span>(<span class="str">'Manzana'</span>)
+<span class="cm">// la pantalla no se actualiza</span>
+
+<span class="cm">// ✅ React sí lo detecta</span>
+<span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>([])
+<span class="fn">setItems</span>([...items, <span class="str">'Manzana'</span>])
+<span class="cm">// React detecta el cambio → re-renderiza → pantalla actualizada</span></code></pre>
+
+    <h2>La sintaxis desglosada</h2>
+    <pre><code><span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>&lt;<span class="tp">string</span>[]&gt;([])
+<span class="cm">//    │       │             │               │</span>
+<span class="cm">//    │       │             │               └─ valor inicial</span>
+<span class="cm">//    │       │             └─ tipo TypeScript: array de strings</span>
+<span class="cm">//    │       └─ función para cambiar el valor — siempre se llama set + Nombre</span>
+<span class="cm">//    └─ el valor actual — lo usás para mostrar en pantalla</span>
+
+<span class="cm">// useState devuelve un array con dos cosas:</span>
+<span class="cm">// resultado = [ valorActual, funciónParaCambiar ]</span>
+<span class="cm">// el destructuring [items, setItems] extrae las dos</span></code></pre>
+
+    <h2>Por qué const si el valor cambia</h2>
+    <p>No estás mutando el <code>const</code>. React re-ejecuta el componente completo con un valor nuevo en cada render. En cada ejecución, el <code>const</code> recibe el valor actualizado que React guardó internamente.</p>
+
+    <pre><code><span class="cm">// Render 1 — items = []</span>
+<span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>([])
+
+<span class="cm">// Usuario clickea → setItems(['Manzana'])</span>
+
+<span class="cm">// Render 2 — React re-ejecuta el componente</span>
+<span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>([])
+<span class="cm">// items = ['Manzana']  ← React recuerda el último valor
+// el valor inicial [] se ignora en re-renders</span></code></pre>
+
+    <h2>Por qué spread y no push</h2>
+    <pre><code><span class="cm">// ❌ Muta el array original — React ve el mismo objeto → no re-renderiza</span>
+items.<span class="fn">push</span>(<span class="str">'Manzana'</span>)
+<span class="fn">setItems</span>(items)
+
+<span class="cm">// ✅ Crea un array NUEVO — React ve un objeto diferente → re-renderiza</span>
+<span class="fn">setItems</span>([...items, <span class="str">'Manzana'</span>])
+
+<span class="cm">// Lo mismo con objetos</span>
+<span class="fn">setUsuario</span>({ ...usuario, edad: <span class="num">30</span> })  <span class="ok">// ✅ objeto nuevo</span>
+<span class="fn">setUsuario</span>({ edad: <span class="num">30</span> })               <span class="er">// ❌ pisa nombre y todo lo demás</span></code></pre>
+
+    <h2>useState con distintos tipos</h2>
+    <pre><code><span class="fn">useState</span>&lt;<span class="tp">number</span>&gt;(<span class="num">0</span>)
+<span class="fn">useState</span>&lt;<span class="tp">string</span>&gt;(<span class="str">''</span>)
+<span class="fn">useState</span>&lt;<span class="tp">boolean</span>&gt;(<span class="kw">false</span>)
+<span class="fn">useState</span>&lt;<span class="tp">string</span>[]&gt;([])
+<span class="fn">useState</span>&lt;<span class="tp">Usuario</span> | <span class="kw">null</span>&gt;(<span class="kw">null</span>)
+
+<span class="cm">// Con interface para tipar objetos complejos</span>
+<span class="kw">interface</span> <span class="tp">Usuario</span> {
+  nombre: <span class="tp">string</span>
+  edad: <span class="tp">number</span>
+}
+<span class="fn">useState</span>&lt;<span class="tp">Usuario</span>[]&gt;([])</code></pre>
+
+    <h2>Props — pasar datos entre componentes</h2>
+    <p>Cuando dos componentes necesitan los mismos datos, el estado sube al padre y los datos bajan como <strong>props</strong>.</p>
+
+    <pre><code><span class="cm">// Interface — define la forma de las props</span>
+<span class="kw">interface</span> <span class="tp">TiendaProps</span> {
+  items: <span class="tp">string</span>[]
+  setItems: (x: <span class="tp">string</span>[]) =&gt; <span class="kw">void</span>
+  <span class="cm">//         ↑              ↑</span>
+  <span class="cm">//    tipo del arg    no retorna nada (void = None en Python)</span>
+}
+
+<span class="cm">// Componente — recibe las props</span>
+<span class="kw">const</span> <span class="fn">Tienda</span> = ({ items, setItems }: <span class="tp">TiendaProps</span>) =&gt; {
+<span class="cm">//              ↑ destructuring    ↑ tipo</span>
+  <span class="kw">return</span> (
+    &lt;button <span class="attr">onClick</span>={() =&gt; <span class="fn">setItems</span>([...items, <span class="str">'Manzana'</span>])}&gt;
+      Agregar
+    &lt;/button&gt;
+  )
+}
+
+<span class="cm">// Uso — padre pasa los datos</span>
+&lt;<span class="fn">Tienda</span> <span class="attr">items</span>={items} <span class="attr">setItems</span>={setItems} /&gt;
+<span class="cm">// los nombres deben coincidir con los de la interface</span></code></pre>
+
+    <div class="callout callout-yellow">
+      <div class="callout-title">Prop drilling — el problema</div>
+      Si muchos componentes necesitan los mismos datos y están muy anidados, tenés que pasar las props por cada nivel aunque no las usen. Eso se llama prop drilling y es exactamente el problema que resuelve Context.
+    </div>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" onclick="goTo(3)">← Anterior</button>
+      <button class="nav-btn nav-btn-primary" onclick="goTo(5)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 6 — CONTEXT ═══════════════ -->
+  <div class="chapter" id="ch-5">
+    <div class="hero">
+      <h1>Context — compartir datos sin props</h1>
+      <p class="subtitle">Cómo crear un canal de datos que cualquier componente del árbol puede consumir directamente, sin pasar props por cada nivel.</p>
+    </div>
+
+    <h2>El problema visual</h2>
+    <pre><code><span class="cm">// Sin Context — prop drilling</span>
+App → Seccion → Contenido → Fila → Navbar
+<span class="cm">// items tiene que pasar por Seccion, Contenido y Fila</span>
+<span class="cm">// aunque ninguno de los tres lo use</span>
+
+<span class="cm">// Con Context — acceso directo</span>
+CarritoContext ————————————————→ Navbar
+<span class="cm">// Navbar se conecta directo al canal, nadie del medio sabe que existe</span></code></pre>
+
+    <h2>Los 4 pasos — siempre son los mismos</h2>
+
+    <h3>Paso 1 — Crear el canal</h3>
+    <pre><code><span class="cm">// La interface define qué datos va a compartir el contexto</span>
+<span class="kw">interface</span> <span class="tp">CarritoContextType</span> {
+  items: <span class="tp">string</span>[]
+  agregar: (item: <span class="tp">string</span>) =&gt; <span class="kw">void</span>
+}
+
+<span class="cm">// createContext crea el canal con valores por defecto</span>
+<span class="cm">// estos defaults solo se usan si no hay Provider encima</span>
+<span class="kw">const</span> CarritoContext = <span class="fn">createContext</span>&lt;<span class="tp">CarritoContextType</span>&gt;({
+  items: [],
+  agregar: () =&gt; {},  <span class="cm">// función vacía como placeholder</span>
+})</code></pre>
+
+    <h3>Paso 2 — El Provider</h3>
+    <pre><code><span class="kw">export const</span> <span class="fn">CarritoProvider</span> = ({ children }: { children: React.ReactNode }) =&gt; {
+<span class="cm">//                               ↑</span>
+<span class="cm">//             children es reservado — React lo llena con lo que ponés adentro</span>
+
+  <span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>&lt;<span class="tp">string</span>[]&gt;([])
+
+  <span class="kw">const</span> agregar = (item: <span class="tp">string</span>) =&gt; {
+    <span class="fn">setItems</span>([...items, item])
+  }
+
+  <span class="kw">return</span> (
+    &lt;CarritoContext.Provider <span class="attr">value</span>={{ items, agregar }}&gt;
+    <span class="cm">//                        ↑</span>
+    <span class="cm">//              lo que ponés disponible para todos los hijos</span>
+      {children}
+      <span class="cm">//  ↑ acá se renderizan los componentes que envuelve el Provider</span>
+    &lt;/CarritoContext.Provider&gt;
+  )
+}</code></pre>
+
+    <h3>Paso 3 — Envolver</h3>
+    <pre><code><span class="cm">// Podés envolver toda la app</span>
+&lt;<span class="fn">CarritoProvider</span>&gt;
+  &lt;<span class="fn">App</span> /&gt;
+&lt;/<span class="fn">CarritoProvider</span>&gt;
+
+<span class="cm">// O solo una sección — solo esa parte tiene acceso</span>
+<span class="kw">const</span> <span class="fn">App</span> = () =&gt; (
+  &lt;div&gt;
+    &lt;<span class="fn">Header</span> /&gt;              <span class="cm">// ❌ no tiene acceso</span>
+    &lt;<span class="fn">CarritoProvider</span>&gt;
+      &lt;<span class="fn">Tienda</span> /&gt;            <span class="ok">// ✅ tiene acceso</span>
+      &lt;<span class="fn">Navbar</span> /&gt;            <span class="ok">// ✅ tiene acceso</span>
+    &lt;/<span class="fn">CarritoProvider</span>&gt;
+    &lt;<span class="fn">Footer</span> /&gt;              <span class="cm">// ❌ no tiene acceso</span>
+  &lt;/div&gt;
+)</code></pre>
+
+    <h3>Paso 4 — Consumir</h3>
+    <pre><code><span class="cm">// Hook personalizado — el atajo</span>
+<span class="kw">export const</span> <span class="fn">useCarrito</span> = () =&gt; <span class="fn">useContext</span>(CarritoContext)
+
+<span class="cm">// En cualquier componente hijo</span>
+<span class="kw">const</span> <span class="fn">Navbar</span> = () =&gt; {
+  <span class="kw">const</span> { items } = <span class="fn">useCarrito</span>()     <span class="cm">// solo pedís lo que necesitás</span>
+  <span class="kw">return</span> &lt;p&gt;{items.length} items&lt;/p&gt;
+}
+
+<span class="kw">const</span> <span class="fn">Tienda</span> = () =&gt; {
+  <span class="kw">const</span> { items, agregar } = <span class="fn">useCarrito</span>()
+  <span class="kw">return</span> (
+    &lt;button <span class="attr">onClick</span>={() =&gt; <span class="fn">agregar</span>(<span class="str">'Manzana'</span>)}&gt;
+      Agregar
+    &lt;/button&gt;
+  )
+}</code></pre>
+
+    <h2>Cuándo usar Context vs Props</h2>
+    <table>
+      <thead><tr><th>Situación</th><th>Solución</th></tr></thead>
+      <tbody>
+        <tr><td>Un solo componente necesita el dato</td><td><code>useState</code> local</td></tr>
+        <tr><td>Dos o tres componentes cercanos</td><td>Props — prop drilling corto está bien</td></tr>
+        <tr><td>Muchos componentes o muy anidados</td><td>Context</td></tr>
+        <tr><td>Estado global muy complejo</td><td>Librería — Zustand, Redux</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Qué contextos son globales vs locales</h2>
+    <pre><code><span class="cm">// GLOBALES — envuelven toda la app</span>
+&lt;<span class="fn">AuthProvider</span>&gt;        <span class="cm">// quién está logueado</span>
+&lt;<span class="fn">TemaProvider</span>&gt;        <span class="cm">// modo claro/oscuro</span>
+&lt;<span class="fn">IdiomaProvider</span>&gt;      <span class="cm">// idioma de la app</span>
+
+<span class="cm">// LOCALES — envuelven solo una sección</span>
+&lt;<span class="fn">CarritoProvider</span>&gt;     <span class="cm">// solo en la tienda</span>
+&lt;<span class="fn">FormProvider</span>&gt;        <span class="cm">// solo en un formulario complejo</span></code></pre>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" onclick="goTo(4)">← Anterior</button>
+      <button class="nav-btn nav-btn-primary" onclick="goTo(6)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CAPÍTULO 7 — EFECTOS ═══════════════ -->
+  <div class="chapter" id="ch-6">
+    <div class="hero">
+      <h1>Efectos — useEffect</h1>
+      <p class="subtitle">Cómo ejecutar código fuera del ciclo de render — APIs, suscripciones, timers — y cuándo limpiarlo.</p>
+    </div>
+
+    <h2>El problema que resuelve</h2>
+    <p>En React, todo el código del componente corre en cada re-render. Pero hay cosas que no querés que corran siempre — una llamada a la API, una suscripción, un timer. <code>useEffect</code> te da control sobre cuándo corre ese código.</p>
+
+    <pre><code><span class="kw">const</span> <span class="fn">Componente</span> = () =&gt; {
+  <span class="cm">// ❌ Esto correría en CADA render — crearía muchas suscripciones</span>
+  supabase.auth.<span class="fn">onAuthStateChange</span>(...)
+
+  <span class="cm">// ✅ Esto corre solo una vez — una sola suscripción</span>
+  <span class="fn">useEffect</span>(() =&gt; {
+    supabase.auth.<span class="fn">onAuthStateChange</span>(...)
+  }, [])
+
+  <span class="kw">return</span> &lt;div&gt;...&lt;/div&gt;
+}</code></pre>
+
+    <h2>Las tres formas</h2>
+    <pre><code><span class="cm">// FORMA 1 — corre en cada render (casi nunca se usa)</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  console.<span class="fn">log</span>(<span class="str">'corro siempre'</span>)
+})
+
+<span class="cm">// FORMA 2 — corre una sola vez al montar</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  console.<span class="fn">log</span>(<span class="str">'corro una vez'</span>)
+}, [])  <span class="cm">// ← array vacío</span>
+
+<span class="cm">// FORMA 3 — corre cuando cambia algo específico</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  console.<span class="fn">log</span>(<span class="str">'corro cuando usuario cambia'</span>)
+}, [usuario])  <span class="cm">// ← array de dependencias</span></code></pre>
+
+    <h2>El array de dependencias</h2>
+    <p>La regla es: poné en el array todo lo que usás dentro del efecto y que puede cambiar entre renders.</p>
+    <pre><code><span class="cm">// Usás nombre adentro → va en el array</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  document.title = <span class="str">`Hola ${nombre}`</span>  <span class="cm">// usa nombre</span>
+}, [nombre])                              <span class="cm">// va en el array</span>
+
+<span class="cm">// No usás nada que cambie → array vacío</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="fn">fetch</span>(<span class="str">'/api/config'</span>).<span class="fn">then</span>(...)   <span class="cm">// no depende de ningún estado</span>
+}, [])
+
+<span class="cm">// Error común — usás algo pero no lo ponés</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  console.<span class="fn">log</span>(items)  <span class="cm">// usa items</span>
+}, [])              <span class="er">// ❌ items siempre va a ser [] adentro del efecto</span></code></pre>
+
+    <h2>La limpieza — el return</h2>
+    <pre><code><span class="fn">useEffect</span>(() =&gt; {
+  <span class="cm">// SETUP — corre al montar o cuando cambia la dependencia</span>
+  <span class="kw">const</span> intervalo = <span class="fn">setInterval</span>(() =&gt; {
+    console.<span class="fn">log</span>(<span class="str">'tick'</span>)
+  }, <span class="num">1000</span>)
+
+  <span class="cm">// CLEANUP — corre antes de desmontarse</span>
+  <span class="cm">// sin esto el timer seguiría corriendo aunque el componente no exista</span>
+  <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(intervalo)
+}, [])</code></pre>
+
+    <h2>El ciclo de vida completo</h2>
+    <pre><code><span class="cm">// 1. Componente aparece (mount)</span>
+<span class="cm">//    → corre el código del useEffect</span>
+
+<span class="cm">// 2. Dependencia cambia</span>
+<span class="cm">//    → corre el return (cleanup del efecto anterior)</span>
+<span class="cm">//    → corre el código del useEffect de nuevo</span>
+
+<span class="cm">// 3. Componente desaparece (unmount)</span>
+<span class="cm">//    → corre el return (cleanup final)</span></code></pre>
+
+    <h2>Cierre — el código de auth completo</h2>
+    <p>Ahora podés leer el código original que arrancó toda esta sesión y entender cada línea:</p>
+
+    <pre><code><span class="kw">export const</span> <span class="fn">AuthProvider</span> = ({ children }: { children: React.ReactNode }) =&gt; {
+
+  <span class="cm">// Tres variables de estado — un Provider puede tener muchas</span>
+  <span class="kw">const</span> [session, setSession] = <span class="fn">useState</span>&lt;<span class="tp">Session</span> | <span class="kw">null</span>&gt;(<span class="kw">null</span>)
+  <span class="kw">const</span> [user, setUser]       = <span class="fn">useState</span>&lt;<span class="tp">User</span> | <span class="kw">null</span>&gt;(<span class="kw">null</span>)
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>)
+
+  <span class="fn">useEffect</span>(() =&gt; {
+
+    <span class="cm">// PARTE 1 — verificar si ya hay sesión activa al arrancar</span>
+    supabase.auth.<span class="fn">getSession</span>().<span class="fn">then</span>(({ data: { session } }) =&gt; {
+      <span class="fn">setSession</span>(session)
+      <span class="fn">setUser</span>(session?.user ?? <span class="kw">null</span>)  <span class="cm">// optional chaining + nullish coalescing</span>
+      <span class="fn">setLoading</span>(<span class="kw">false</span>)
+    })
+
+    <span class="cm">// PARTE 2 — escuchar cambios futuros (login, logout, token renewal)</span>
+    <span class="kw">const</span> { data: { subscription } } = supabase.auth.<span class="fn">onAuthStateChange</span>(
+      (_event, session) =&gt; {   <span class="cm">// _event con _ = "llega pero no lo uso"</span>
+        <span class="fn">setSession</span>(session)
+        <span class="fn">setUser</span>(session?.user ?? <span class="kw">null</span>)
+        <span class="fn">setLoading</span>(<span class="kw">false</span>)
+      }
+    )
+
+    <span class="cm">// PARTE 3 — cleanup: cancelar la suscripción cuando el componente muere</span>
+    <span class="kw">return</span> () =&gt; subscription.<span class="fn">unsubscribe</span>()
+
+  }, [])  <span class="cm">// array vacío — corre una sola vez al montar</span>
+
+  <span class="cm">// Pone los tres estados disponibles para toda la app</span>
+  <span class="kw">return</span> (
+    &lt;AuthContext.Provider <span class="attr">value</span>={{ session, user, loading }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  )
+}
+
+<span class="cm">// El atajo para consumir en cualquier componente</span>
+<span class="kw">export const</span> <span class="fn">useAuth</span> = () =&gt; <span class="fn">useContext</span>(AuthContext)</code></pre>
+
+    <div class="callout callout-green">
+      <div class="callout-title">Llegaste al final</div>
+      Arrancaste sin entender una línea de ese código. Ahora podés leerlo completo y explicar qué hace cada parte. Los próximos pasos naturales son TypeScript en profundidad, routing con React Router, y manejo de datos con React Query o Zustand.
+    </div>
+
+    <div class="chapter-controls">
+      <button class="nav-btn" onclick="goTo(5)">← Anterior</button>
+      <button class="nav-btn" disabled>Fin ✓</button>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+const chapters = document.querySelectorAll('.chapter')
+const btns = document.querySelectorAll('.chapter-btn')
+const progress = document.getElementById('progress')
+const counter = document.getElementById('chapter-counter')
+let current = 0
+
+function goTo(n) {
+  chapters[current].classList.remove('active')
+  btns[current].classList.remove('active')
+  current = n
+  chapters[current].classList.add('active')
+  btns[current].classList.add('active')
+  progress.style.width = ((current + 1) / chapters.length * 100) + '%'
+  counter.textContent = (current + 1) + ' / ' + chapters.length
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+goTo(0)
+</script>
+</body>
+</html>
