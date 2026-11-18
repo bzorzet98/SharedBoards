@@ -41,3 +41,9 @@ export interface Task {
   created_by: string
   created_at: string
 }
+
+export interface CreateBoardForm {
+  name: string
+  description: string
+  is_shared: boolean
+}
